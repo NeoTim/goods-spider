@@ -4,7 +4,7 @@
 
 ### Demo
 
-[demo](http://goods-spider.forsigner.com)
+http://goods-spider.forsigner.com
 
 ### 安装
 
