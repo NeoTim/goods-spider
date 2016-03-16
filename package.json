@@ -1,0 +1,40 @@
+{
+  "name": "goods-spider",
+  "version": "1.0.0",
+  "description": "抓取电商网站的商品信息，暂时只支持淘宝、天猫",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "crawler",
+    "spider",
+    "taobao",
+    "tmall",
+    "jingdogn",
+    "jd",
+    "淘宝",
+    "天猫",
+    "京东"
+  ],
+  "author": {
+    "name": "forsigner",
+    "email": "forsigner@gmail.com"
+  },
+  "contributors": {
+    "name": "forsigner",
+    "email": "forsigner@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:forsigner/goods-spider.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "0.20.0",
+    "gbk": "0.1.0",
+    "moment": "2.12.0",
+    "request": "2.69.0",
+    "underscore": "1.8.3",
+    "underscore.string": "3.3.4"
+  },
+  "devDependencies": {}
+}
