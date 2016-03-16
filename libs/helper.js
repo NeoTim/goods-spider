@@ -37,8 +37,12 @@ exports.getTaobaoItemInfo = function(id) {
         return reject(error);
       }
 
-      var good = JSON.parse(body).data;
-      var value = JSON.parse(good.apiStack[0].value);
+      try {
+        var good = JSON.parse(body).data;
+        var value = JSON.parse(good.apiStack[0].value);
+      } catch (err) {
+        throw new Error(err);
+      }
 
       var priceUnits = value.data.itemInfoModel.priceUnits;
       var seller = good.seller;
@@ -142,38 +146,57 @@ exports.getTmallItemInfo = function(id) {
         return reject(err);
       }
 
+      var $ = cheerio.load(string);
+
       string = string.replace(/\n/g, '');
       string = string.replace(/\r/g, '');
       string = string.replace(/\t/g, '');
       string = string.replace(/"/g, '\'');
+      string = string.replace(/\s/g, '');
 
-      var $ = cheerio.load(string);
-      var detailStart = string.indexOf('_DATA_Detail = ');
-      var detailEnd = string.indexOf('}catch', detailStart);
+      var reg = {
+        detail: /var_DATA_Detail=(.*?);<\/script>/,
+        skip: /var_DATA_Mdskip=(.*?)<\/script>/,
+        promoPrice: /"promotionList":(.*?)]}/
+      };
 
-      var skipStart = string.indexOf(' _DATA_Mdskip = ');
-      var skipEnd = string.indexOf('}catch', skipStart);
-
-      var detail = string.substring(detailStart + 15, detailEnd - 1);
+      var detail = string.match(reg.detail)[1];
       detail = detail.replace(/'/g, '"');
-      detail = JSON.parse(detail);
+      try {
+        detail = JSON.parse(detail);
+      } catch (err) {
+        throw new Error(err);
+      }
 
-      var skip = string.substring(skipStart + 17, skipEnd - 1);
+      var skip = string.match(reg.skip)[1];
       skip = skip.replace(/'/g, '"');
-      skip = JSON.parse(skip);
+
+      try {
+        skip = JSON.parse(skip);
+      } catch (err) {
+        throw new Error(err);
+      }
 
       var province;
       var city;
-
       var title = detail.itemDO.title;
       var picUrl = detail.itemDO.mainPic;
-      var originPrice = skip.defaultModel.priceResultDO.defaultPriceInfoDO.price.amount;
-      var promoPrice = skip.defaultModel.priceResultDO.defaultPriceInfoDO.promPrice ? skip.defaultModel.priceResultDO.defaultPriceInfoDO.promPrice.price : originPrice;
+
+      var originPrice = detail.detail.defaultItemPrice;
+
+      var promoPriceData = JSON.stringify(skip.defaultModel.itemPriceResultDO);
+
+      promoPriceData = JSON.parse(promoPriceData.match(reg.promoPrice)[1] + ']')[0];
+
+      var promoPrice =  promoPriceData.price;
+
       var discount = originPrice === promoPrice ? 10 : (promoPrice / originPrice) * 10;
-      var delivery = _.str.include(JSON.stringify(skip.defaultModel.deliverDO.extDeliverySkuMap), '快递: 0.00') ? true : false;
-      var deliveryAddress = skip.defaultModel.deliverDO.deliveryAddress;
-      var shopTitle = $('.shop').text();
-      var shopUrl = $('.shop').attr('href');
+      var delivery = _.str.include(JSON.stringify(skip.defaultModel.deliveryDO.extDeliverySkuMap), '快递: 0.00') ? true : false;
+      var deliveryAddress = skip.defaultModel.deliveryDO.deliveryAddress;
+
+      var shopTitle = $('.shop-t').text();
+      var shopUrl = 'http:' + $('.go-shop').attr('href');
+
       var sellCount = skip.defaultModel.sellCountDO.sellCount;
       var itemUrl = 'http://detail.tmall.com/item.htm?id=' + id;
       var goodId = id;
@@ -183,7 +206,6 @@ exports.getTmallItemInfo = function(id) {
       // 获取省份
       var provinces = helper.getProvinces();
       _.each(provinces, function(i) {
-
         if (deliveryAddress.indexOf(i) > -1) {
           province = i;
         }
@@ -214,6 +236,7 @@ exports.getTmallItemInfo = function(id) {
           picsUrl.push(ul[i].attribs.src.replace('_60x60q90.jpg', ''));
         }
 
+        string = string.replace(/'/g, '"');
         var data = {
           title: title,
           picUrl: picUrl,
@@ -225,12 +248,16 @@ exports.getTmallItemInfo = function(id) {
           province: province,
           city: city,
           shopTitle: shopTitle,
+
           shopUrl: shopUrl,
+
           sellerNick: decodeURI(detail.itemDO.sellerNickName),
           sellCount: parseInt(sellCount, 10),
           itemUrl: itemUrl,
           goodId: goodId,
-          source: source
+          source: source,
+          skip: skip,
+          detail: detail
         };
 
         resolve(data);

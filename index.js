@@ -1,10 +1,5 @@
 'use strict';
 
-var _ = require('underscore');
-var request = require('request');
-var cheerio = require('cheerio');
-var gbk = require('gbk');
-var moment = require('moment');
 var url = require('url');
 var querystring = require('querystring');
 
@@ -27,6 +22,7 @@ exports.getItemInfo = function(itemUrl) {
 
     // 抓取淘宝数据
     if (itemUrl.indexOf('taobao.com') > -1) {
+      console.log('========================');
       helper.getTaobaoItemInfo(id)
         .then(function(data) {
           resolve(data);
@@ -37,6 +33,9 @@ exports.getItemInfo = function(itemUrl) {
 
     // 抓取天猫数据
     } else if (itemUrl.indexOf('tmall.com') > -1) {
+      console.log('-------------------');
+      console.log(id);
+      console.log('-------------------');
       helper.getTmallItemInfo(id)
         .then(function(data) {
           resolve(data);
