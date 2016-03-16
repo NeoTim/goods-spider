@@ -1,4 +1,4 @@
-# Goods-spider
+# Goods-spider [![Build Status](https://travis-ci.org/forsigner/goods-spider.svg?branch=master)](https://travis-ci.org/forsigner/goods-spider) [![NPM Version](http://img.shields.io/npm/v/goods-spider.svg?style=flat)](https://www.npmjs.org/package/goods-spider)
 
 > 抓取电商网站的商品信息，暂时只支持淘宝、天猫
 
