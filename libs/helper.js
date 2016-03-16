@@ -229,11 +229,12 @@ exports.getTmallItemInfo = function(id) {
         $ = cheerio.load(string);
 
         // 获取商品图片所在的html片段
-        var ul = $('#J_UlThumb img');
-
+        var $ul = $('#J_UlThumb img');
+        var arr = Array.prototype.slice.call($ul);
         var picsUrl = [];
-        for (var i = 0; i < 5; i++) {
-          picsUrl.push(ul[i].attribs.src.replace('_60x60q90.jpg', ''));
+
+        for (var i = 0; i < arr.length; i++) {
+          picsUrl.push(arr[i].attribs.src.replace('_60x60q90.jpg', ''));
         }
 
         string = string.replace(/'/g, '"');
@@ -248,16 +249,12 @@ exports.getTmallItemInfo = function(id) {
           province: province,
           city: city,
           shopTitle: shopTitle,
-
           shopUrl: shopUrl,
-
           sellerNick: decodeURI(detail.itemDO.sellerNickName),
           sellCount: parseInt(sellCount, 10),
           itemUrl: itemUrl,
           goodId: goodId,
-          source: source,
-          skip: skip,
-          detail: detail
+          source: source
         };
 
         resolve(data);
