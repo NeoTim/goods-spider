@@ -19,14 +19,6 @@ exports.getProvinces = function() {
 };
 
 /**
- * 获取查询历史价格索要的url
- *
- * @method getHistoryPriceUrl
- * @param {String} url itemUrl
- * @return {boolean}
- */
-
-/**
 * 获取淘宝商品信息
 *
 * @method _getTaobaoItemInfo
@@ -242,10 +234,7 @@ exports.getTmallItemInfo = function(id) {
         };
 
         resolve(data);
-
       });
-
     });
-
   });
 };
