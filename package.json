@@ -1,6 +1,6 @@
 {
   "name": "goods-spider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "抓取电商网站的商品信息，暂时只支持淘宝、天猫",
   "main": "index.js",
   "scripts": {},
