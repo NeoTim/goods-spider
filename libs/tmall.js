@@ -87,7 +87,7 @@ function fetchMobile(url, id) {
         promoPriceData = JSON.parse(promoPriceData.match(reg.promoPrice)[1] + ']')[0];
         promoPrice = promoPriceData.price;
       } else {
-        promoPrice = promoPriceData.match(/,"price":"(.*?)"},/)[1];
+        promoPrice = promoPriceData.match(/,"price":"(.*?)"[},|}},]/)[1];
       }
 
       var discount = originPrice === promoPrice ? 10 : (promoPrice / originPrice) * 10;
@@ -96,8 +96,7 @@ function fetchMobile(url, id) {
 
       var shopTitle = $('.shop-t').text();
       var shopUrl = 'http:' + $('.go-shop').attr('href');
-
-      var sellCount = skip.defaultModel.sellCountDO.sellCount;
+      var sellCount = skip.defaultModel.sellCountDO ? skip.defaultModel.sellCountDO.sellCount : 0;
       var itemUrl = 'http://detail.tmall.com/item.htm?id=' + id;
       var goodId = id;
       var source = 2; // 2代表商品来源是天猫
