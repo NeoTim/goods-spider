@@ -30,8 +30,8 @@
   "license": "MIT",
   "dependencies": {
     "cheerio": "0.20.0",
-    "gbk": "0.1.0",
     "request": "2.69.0",
+    "request-gbk": "1.0.0",
     "underscore": "1.8.3",
     "underscore.string": "3.3.4"
   },

@@ -3,7 +3,7 @@
 var _ = require('underscore');
 _.str = require('underscore.string');
 var cheerio = require('cheerio');
-var gbk = require('gbk');
+var gbk = require('request-gbk');
 var provinces = require('./provinces');
 
 /**
