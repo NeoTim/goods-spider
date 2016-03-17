@@ -2,8 +2,8 @@
 
 var url = require('url');
 var querystring = require('querystring');
-
-var helper = require('./libs/helper');
+var taobao = require('./libs/taobao');
+var tmall = require('./libs/tmall');
 
 /**
  * 抓取商品信息
@@ -22,8 +22,7 @@ exports.getItemInfo = function(itemUrl) {
 
     // 抓取淘宝数据
     if (itemUrl.indexOf('taobao.com') > -1) {
-      console.log('========================');
-      helper.getTaobaoItemInfo(id)
+      taobao.get(id)
         .then(function(data) {
           resolve(data);
         })
@@ -33,10 +32,7 @@ exports.getItemInfo = function(itemUrl) {
 
     // 抓取天猫数据
     } else if (itemUrl.indexOf('tmall.com') > -1) {
-      console.log('-------------------');
-      console.log(id);
-      console.log('-------------------');
-      helper.getTmallItemInfo(id)
+      tmall.get(id)
         .then(function(data) {
           resolve(data);
         })
